@@ -143,5 +143,5 @@ Mahasiswa dengan nilai masuk tinggi cenderung mempertahankan performa akademik y
 ## 👥 Author
 
 **Daniel Siahaan, Jessica Pasaribu, Novrael Marbun – UTS Data Science 2025**
-**Kelompok:** 41425078*41425079_41425080
-**Judul:** \_Student Academic Status Analysis — Predicting Dropout, Enrolled, and Graduate*
+**Kelompok:** 41425078_41425079_41425080
+**Judul:** _Student Academic Status Analysis — Predicting Dropout, Enrolled, and Graduate_
