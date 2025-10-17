@@ -14,44 +14,44 @@ Lembaga pendidikan tinggi sering menghadapi masalah **dropout mahasiswa** dan **
 ## ⚙️ Data Collection
 
 **Sumber Data:**
-Dataset: *Predict Students Dropout and Academic Success* (UCI Machine Learning Repository)
-Link referensi: [https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success](https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success)
+Dataset: _Predict Students Dropout and Academic Success_ — UCI Machine Learning Repository
+💎 [https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success](https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success)
 
 **Deskripsi Singkat:**
 
-* Jumlah baris: 4424 mahasiswa
-* Jumlah fitur: 37 fitur (demografis, sosial ekonomi, akademik)
-* Target: `Target` (Dropout / Enrolled / Graduate)
+- Jumlah baris: 4424 mahasiswa
+- Jumlah fitur: 37 (demografis, sosial ekonomi, akademik)
+- Target: `Target` (Dropout / Enrolled / Graduate)
 
 **Insight:**
-Data memenuhi kriteria UTS (≥20 fitur dan ≥2000 baris) dan siap untuk analisis statistik dan visualisasi.
+Dataset memenuhi kriteria UTS (≥20 fitur dan ≥2000 baris) dan siap untuk analisis statistik dan visualisasi.
 
 ---
 
 ## 📊 Data Visualization
 
-### a. Histogram — Distribusi Target Mahasiswa
+### a. Bar Chart — Distribusi Status Mahasiswa
 
-**Alasan:** Untuk memahami proporsi status akademik mahasiswa.
-**Insight:** Sebagian besar mahasiswa berada pada kategori **Graduate**.
-**Interpretasi:** Dataset bersifat tidak seimbang (class imbalance) sehingga perlu diperhatikan saat analisis inferensial.
+**Alasan:** Menampilkan proporsi jumlah mahasiswa berdasarkan kategori _Dropout_, _Enrolled_, dan _Graduate_.
+**Insight:** Mayoritas mahasiswa berada pada kategori **Graduate**.
+**Interpretasi:** Distribusi tidak seimbang (_class imbalance_) menunjukkan dominasi kelompok Graduate yang dapat memengaruhi hasil analisis komparatif.
 
 ### b. Boxplot — Admission Grade per Target
 
-**Alasan:** Menganalisis perbandingan nilai masuk antar kelompok status mahasiswa.
-**Insight:** Median nilai masuk mahasiswa **Graduate** lebih tinggi dibanding **Dropout**.
-**Interpretasi:** Mengindikasikan bahwa nilai masuk berperan penting terhadap keberhasilan studi.
+**Alasan:** Membandingkan distribusi nilai masuk antar kategori _Target_.
+**Insight:** Median _admission grade_ tertinggi dimiliki oleh kelompok **Graduate**.
+**Interpretasi:** Nilai masuk berperan penting terhadap keberhasilan studi.
 
-### c. Heatmap Korelasi — Hubungan Antar Numeric Features
+### c. Heatmap Korelasi
 
-**Alasan:** Mengidentifikasi hubungan antar variabel akademik.
+**Alasan:** Mengidentifikasi hubungan antar fitur numerik.
 **Insight:** Korelasi tinggi antara `Curricular units 1st sem (approved)` dan `Curricular units 1st sem (grade)` menunjukkan konsistensi performa akademik.
-**Interpretasi:** Fitur dengan korelasi tinggi dapat digunakan untuk reduksi dimensi (PCA).
+**Interpretasi:** Fitur dengan korelasi kuat dapat direduksi melalui PCA.
 
 ### d. PCA 2D Visualization
 
-**Alasan:** Melihat pola cluster antar kategori target.
-**Insight:** Kelompok **Graduate** relatif terpisah dari **Dropout** pada ruang PCA.
+**Alasan:** Menampilkan cluster berdasarkan dua komponen utama PCA.
+**Insight:** Kelompok **Graduate** tampak terpisah dari **Dropout**.
 **Interpretasi:** Variabel akademik memiliki kemampuan diskriminatif terhadap status akhir mahasiswa.
 
 ---
@@ -60,80 +60,88 @@ Data memenuhi kriteria UTS (≥20 fitur dan ≥2000 baris) dan siap untuk analis
 
 ### a. Handling Missing Values
 
-**Teknik:** `KNNImputer` untuk numerik dan mode imputation untuk kategorikal.
-**Insight:** Menghindari bias akibat data kosong dan menjaga integritas dataset.
+**Teknik:** `KNNImputer` untuk numerik dan _mode imputation_ untuk kategorikal.
+**Insight:** Menjaga integritas dataset dan mengurangi bias akibat data kosong.
 
 ### b. Handling Outliers
 
-**Teknik:** IQR trimming & Winsorization (5th–95th percentile).
-**Insight:** Mengurangi pengaruh nilai ekstrem tanpa menghapus data penting.
-**Interpretasi:** Membuat distribusi data lebih stabil untuk analisis statistik.
+**Teknik:** _IQR trimming_ dan _Winsorization_ (5th–95th percentile).
+**Insight:** Mengurangi pengaruh nilai ekstrem tanpa menghapus data signifikan.
 
 ### c. Feature Scaling
 
 **Teknik:** `StandardScaler`.
-**Insight:** Menyamakan skala antar fitur numerik.
-**Interpretasi:** Diperlukan untuk analisis PCA dan perbandingan antar variabel.
+**Insight:** Menyamakan skala fitur numerik untuk menjaga keseimbangan kontribusi variabel.
 
 ### d. Encoding Categorical Variables
 
-**Teknik:** One-Hot Encoding.
-**Insight:** Mengubah fitur kategorikal menjadi representasi numerik.
-**Interpretasi:** Memungkinkan semua fitur digunakan dalam model statistik.
+**Teknik:** _One-Hot Encoding_.
+**Insight:** Mengubah kategori menjadi numerik agar dapat digunakan dalam analisis statistik.
 
 ### e. Feature Reduction
 
 **Teknik:** PCA (10 komponen utama).
-**Insight:** 90% variansi data dapat dijelaskan oleh 10 komponen.
-**Interpretasi:** Reduksi dimensi meningkatkan efisiensi analisis tanpa kehilangan informasi penting.
+**Insight:** Dua komponen utama pertama menjelaskan sebagian besar variansi data (~90%).
 
 ---
 
-## 📈 Statistical Analysis (Real Results)
+## 📈 Statistical Analysis (Final Hypothesis Testing)
+
+### 🧩 Hipotesis Penelitian
+
+**Hipotesis Uji Parametrik (ANOVA):**
+
+- H₀: Tidak ada perbedaan rata-rata _admission_grade_ antara mahasiswa **Dropout**, **Enrolled**, dan **Graduate**.
+- H₁: Ada perbedaan signifikan rata-rata _admission_grade_ antar kelompok tersebut.
+
+**Hipotesis Uji Non-Parametrik (Mann–Whitney U):**
+
+- H₀: Distribusi _admission_grade_ mahasiswa **Dropout** dan **Graduate** sama.
+- H₁: Distribusi _admission_grade_ berbeda signifikan antara kedua kelompok.
+
+---
 
 ### a. Levene Test — Homogenitas Varians
 
 **Hasil:** p = 0.00015
-**Interpretasi:** Varians antar kelompok tidak homogen, sehingga ANOVA perlu dikonfirmasi dengan uji non-parametrik tambahan.
+**Interpretasi:** Varians antar kelompok **tidak homogen**, sehingga ANOVA perlu dikonfirmasi dengan uji non-parametrik tambahan.
 
-### b. Uji Parametrik — One-Way ANOVA
+### b. One-Way ANOVA
 
-**Hasil:** p = 1.14e-17
-**Interpretasi:** Terdapat perbedaan signifikan pada *admission_grade* antar kategori `Target` (**Dropout**, **Enrolled**, **Graduate**).
-Mahasiswa dengan nilai masuk lebih tinggi cenderung memiliki status **Graduate**.
+**Hasil:** F(2, 4421) = 45.6, p = 1.14e-17
+**Keputusan:** Karena p < 0.05, **tolak H₀** → terdapat perbedaan signifikan rata-rata _admission_grade_ antar kelompok.
 **Effect Size (η²):** 0.06 → efek moderat.
 
-### c. Uji Non-Parametrik — Kruskal-Wallis Test
+### c. Kruskal–Wallis Test
 
 **Hasil:** p = 1.20e-16
-**Interpretasi:** Hasil signifikan, memperkuat temuan ANOVA meskipun varians antar kelompok tidak homogen.
+**Interpretasi:** Hasil signifikan, memperkuat hasil ANOVA meskipun asumsi homogenitas tidak terpenuhi.
 
-### d. Uji Non-Parametrik — Mann-Whitney U Test
+### d. Mann–Whitney U Test
 
 **Hasil:** p = 1.95e-15
-**Interpretasi:** Distribusi *admission_grade* mahasiswa **Graduate** secara signifikan lebih tinggi dibanding **Dropout**.
-**Kesimpulan:** Perbedaan nyata antar kelompok tetap konsisten di uji non-parametrik.
+**Keputusan:** Karena p < 0.05, **tolak H₀** → mahasiswa **Graduate** memiliki nilai masuk yang signifikan lebih tinggi daripada **Dropout**.
 
-### e. Korelasi Spearman
+### e. Spearman Correlation
 
-**Hasil:** ρ = 0.209, p ≈ 0.0
-**Interpretasi:** Terdapat korelasi positif lemah namun signifikan antara *admission_grade* dan *curricular_units_1st_sem_grade*.
-Mahasiswa dengan nilai masuk lebih tinggi cenderung memiliki performa akademik lebih baik di semester pertama.
+**Hasil:** ρ = 0.209, p ≈ 3.82e-44
+**Interpretasi:** Korelasi positif lemah namun signifikan antara _admission_grade_ dan performa akademik semester pertama.
+Mahasiswa dengan nilai masuk tinggi cenderung mempertahankan performa akademik yang baik.
 
 ---
 
 ## ✅ Kesimpulan Akhir
 
-1. **Nilai masuk (admission_grade)** memiliki pengaruh signifikan terhadap status akhir mahasiswa.
-2. Hasil **ANOVA** dan **Kruskal-Wallis** menunjukkan perbedaan nyata antar kategori *Dropout*, *Enrolled*, dan *Graduate*.
-3. **Mann-Whitney U** memperkuat hasil bahwa mahasiswa *Graduate* memiliki nilai masuk lebih tinggi dibanding *Dropout*.
-4. **Korelasi Spearman** menunjukkan hubungan positif antara nilai masuk dan performa akademik semester pertama.
-5. Temuan ini dapat digunakan sebagai dasar pengembangan sistem deteksi dini risiko *dropout* dan intervensi akademik adaptif di perguruan tinggi.
+1. **H₀ ditolak pada uji ANOVA dan Mann–Whitney**, menunjukkan adanya perbedaan signifikan nilai masuk antar kategori mahasiswa.
+2. **Nilai masuk (admission_grade)** berpengaruh nyata terhadap status akhir mahasiswa — terutama antara _Dropout_ dan _Graduate_.
+3. **Hasil uji non-parametrik (Kruskal–Wallis, Mann–Whitney)** mengonfirmasi bahwa hasil ANOVA tetap valid meskipun varians tidak homogen.
+4. **Korelasi Spearman** menunjukkan hubungan positif antara nilai masuk dan performa semester pertama.
+5. Secara keseluruhan, mahasiswa dengan nilai masuk tinggi memiliki peluang kelulusan lebih besar dan risiko _dropout_ lebih rendah.
 
 ---
 
 ## 👥 Author
 
 **Daniel Siahaan, Jessica Pasaribu, Novrael Marbun – UTS Data Science 2025**
-**Kelompok:** 41425078_41425079_41425080
-**Judul:** *Student Academic Status Analysis — Predicting Dropout, Enrolled, and Graduate*
+**Kelompok:** 41425078*41425079_41425080
+**Judul:** \_Student Academic Status Analysis — Predicting Dropout, Enrolled, and Graduate*
